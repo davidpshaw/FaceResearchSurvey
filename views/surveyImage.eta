@@ -18,10 +18,11 @@
     <div class="container-fluid" style="padding-top: 20px;">
         <div class="container-md">
             <form method="POST">
-                <input type="hidden" id="stage" value="1" />
+                <input type="hidden" name="stage" value="<%= it.stage %>" />
+                 <input type="hidden" name="imageName" value="<%= it.imageName %>" />
                 <div class="row" style="text-align: center;">
                     <div class="col">
-                        <img src="images/10th_finished.jpg" class="img-fluid" style="max-width: 70%;">
+                        <img src="images/<%= it.imageName %>" class="img-fluid" style="max-width: 70%;">
                     </div>
                 </div>
                 <div class="row">
@@ -29,14 +30,14 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <label for="attractiveness" class="form-label">How attractive do you think this person is (10 = most attractive)</label>
                         <div class="mb-3">
-                            <select class="form-select form-select mb-3" id="attractiveness" name="attractiveness"
-                                aria-label=".form-select example">
-                                <option selected>How attractive do you think this person is (10 = most attractive)</option>
+                            <select class="form-select" id="attractiveness" name="attractiveness" required>
+                                <option selected disabled value="">Choose...</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
-                                <option value="">4</option>
+                                <option value="4">4</option>
                                 <option value="5">5</option>
                                 <option value="6">6</option>
                                 <option value="7">7</option>
@@ -47,29 +48,32 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col">
-                        <div class="mb-3">
-                            <select class="form-select form-select mb-3" id="symmetrical" name="symmetrical"
-                                aria-label=".form-select example">
-                                <option selected>How symmetrical do you think this person is (10 = most symmetrical)</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div>
+                        <label for="symmetrical" class="form-label">How symmetrical do you think this person is (10 = most symmetrical)</label>
+                        <select class="form-select" id="symmetrical" name="symmetrical" required>
+                            <option selected disabled value="">Choose...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
                     </div>
                 </div>
 
-
-                <button type="submit" class="btn btn-primary">Next</button>
+                <div class="row" style="padding-top: 10px">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Next</button>
+                    </div>
+                </div>
+                
             </form>
         </div>
 

@@ -18,7 +18,7 @@
     <div class="container-fluid" style="padding-top: 20px;">
         <div class="container-md">
             <form method="POST">
-                <input type="hidden" id="stage" value="0" />
+                <input type="hidden" name="stage" value="<%= it.stage %>" />
                 <div class="row">
                     <div class="col">
                         <div class="mb-3">
