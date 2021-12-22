@@ -4,11 +4,11 @@ const port = 4848
 const eta = require('eta')
 const path = require('path')
 const fs = require('fs')
-const { parse } = require('json2csv')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
-const numberOfImagesPerSurvey = 20
+const numberOfImagesPerSurvey = 2
+const surveyLogFile = 'survey.log'
 
 // process urlencoded form data
 app.use(express.json())
@@ -85,7 +85,7 @@ const addDataToSession = (req, key, data) => {
 const writeCompleteSurveyDataToFile = (data) => {
   try {
     const writeData = JSON.stringify(data)
-    fs.appendFile('survey.log', writeData, (err) => {
+    fs.appendFile(surveyLogFile, writeData, (err) => {
       if (err) {
         throw err
       }
@@ -143,6 +143,19 @@ app.post('/', (req, res, next) => {
       imageName: req.session.surveyImages[nextStage]
     })
   }
+})
+
+app.get('/results', (req, res) => {
+  const options = {
+    root: path.join(__dirname)
+  }
+  res.sendFile(surveyLogFile, options, function (err) {
+    if (err) {
+      console.log(`Error: ${err}`)
+    } else {
+      console.log('Sent:', surveyLogFile)
+    }
+  })
 })
 
 loadAllImageNames()
