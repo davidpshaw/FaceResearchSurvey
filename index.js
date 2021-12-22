@@ -4,9 +4,9 @@ const port = 4848
 const eta = require('eta')
 const path = require('path')
 const fs = require('fs')
+const { parse } = require('json2csv')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const req = require('express/lib/request')
 
 const numberOfImagesPerSurvey = 20
 
@@ -55,27 +55,48 @@ const chooseRandomImagesFromArray = (originalArray, imageCount) => {
 }
 
 const addImageDataToSession = (req, imageName, attractiveness, symmetrical) => {
+  const data = {
+    attractiveness: attractiveness,
+    symmetrical: symmetrical
+  }
+  addDataToSession(req, imageName, data)
+}
+
+const addMetaDataToSession = (req, first, last, age, race, ethnicity, livedLocations) => {
+  const data = {
+    first: first,
+    last: last,
+    age: age,
+    race: race,
+    ethnicity: ethnicity,
+    livedLocations: livedLocations
+  }
+  addDataToSession(req, 'meta', data)
+}
+
+const addDataToSession = (req, key, data) => {
   if (!req.session.surveyResponse) {
     req.session.surveyResponse = {}
   }
 
-  req.session.surveyResponse[imageName] = {
-    attractiveness: attractiveness,
-    symmetrical: symmetrical
+  req.session.surveyResponse[key] = data
+}
+
+const writeCompleteSurveyDataToFile = (data) => {
+  try {
+    const writeData = JSON.stringify(data)
+    fs.appendFile('survey.log', writeData, (err) => {
+      if (err) {
+        throw err
+      }
+      console.log('File was updated.')
+    })
+  } catch (err) {
+    console.error(err)
   }
 }
 
 /// /
-
-app.get('/stat', function (req, res) {
-  if (req.session.page_views) {
-    req.session.page_views++
-    res.send('You visited this page ' + req.session.page_views + ' times')
-  } else {
-    req.session.page_views = 1
-    res.send('Welcome to this page for the first time!')
-  }
-})
 
 app.get('/', (req, res, next) => {
   // for each new session, define some survey images from the full set
@@ -96,6 +117,10 @@ app.post('/', (req, res, next) => {
   const prevStage = req.body.stage
   const nextStage = parseInt(prevStage) + 1
 
+  if (req.body.age) {
+    console.log(req.body)
+    addMetaDataToSession(req, req.body.firstName, req.body.lastName, req.body.age, req.body.ethnicity, req.body.livedLocations)
+  }
   if (req.body.imageName) {
     addImageDataToSession(req, req.body.imageName, req.body.attractiveness, req.body.symmetrical)
   }
@@ -108,7 +133,10 @@ app.post('/', (req, res, next) => {
   console.log(`stage ${nextStage}`)
 
   if (nextStage >= numberOfImagesPerSurvey) {
-    res.send('Survey is done')
+    writeCompleteSurveyDataToFile(req.session.surveyResponse)
+    res.render('surveyComplete', {
+      surveyResponse: req.session.surveyResponse
+    })
   } else {
     res.render('surveyImage', {
       stage: nextStage,
