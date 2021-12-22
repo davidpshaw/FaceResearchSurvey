@@ -19,7 +19,13 @@
         <div class="container-md">
             <form method="POST">
                 <input type="hidden" name="stage" value="<%= it.stage %>" />
-                 <input type="hidden" name="imageName" value="<%= it.imageName %>" />
+                <input type="hidden" name="imageName" value="<%= it.imageName %>" />
+                <div class="row" style="text-align: center;">
+                    <div class="col">
+                        <h4>Image <%= it.currentPage %> of <%= it.totalPages %></h4>
+                    </div>
+                </div>
+                <div class=
                 <div class="row" style="text-align: center;">
                     <div class="col">
                         <img src="images/<%= it.imageName %>" class="img-fluid" style="max-width: 70%;">

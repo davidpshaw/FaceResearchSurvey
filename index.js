@@ -7,7 +7,7 @@ const fs = require('fs')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
-const numberOfImagesPerSurvey = 2
+const numberOfImagesPerSurvey = 20
 const surveyLogFile = 'survey.log'
 
 // process urlencoded form data
@@ -54,6 +54,23 @@ const chooseRandomImagesFromArray = (originalArray, imageCount) => {
   return newArray
 }
 
+const clearSessionData = (req) => {
+  console.log('CLEAR SESSION was called!!!!')
+  req.session.surveyResponse = {}
+  initSessionData(req)
+  req.session.save()
+}
+
+const initSessionData = (req) => {
+  if (!req.session.surveyResponse) {
+    req.session.surveyResponse = {}
+  }
+  req.session.surveyImages = chooseRandomImagesFromArray(app.allImages, numberOfImagesPerSurvey)
+  req.session.save()
+
+  console.log(`New survey images: ${req.session.surveyImages}`)
+}
+
 const addImageDataToSession = (req, imageName, attractiveness, symmetrical) => {
   const data = {
     attractiveness: attractiveness,
@@ -75,10 +92,6 @@ const addMetaDataToSession = (req, first, last, age, race, ethnicity, livedLocat
 }
 
 const addDataToSession = (req, key, data) => {
-  if (!req.session.surveyResponse) {
-    req.session.surveyResponse = {}
-  }
-
   req.session.surveyResponse[key] = data
 }
 
@@ -100,13 +113,7 @@ const writeCompleteSurveyDataToFile = (data) => {
 
 app.get('/', (req, res, next) => {
   // for each new session, define some survey images from the full set
-  if (!req.session.surveyImages) {
-    req.session.surveyImages = chooseRandomImagesFromArray(app.allImages, numberOfImagesPerSurvey)
-    console.log(`new ${req.session.surveyImages}`)
-  } else {
-    console.log(`existing ${req.session.surveyImages}`)
-  }
-  req.session.save()
+  initSessionData(req)
 
   res.render('survey1', {
     stage: -1
@@ -126,20 +133,23 @@ app.post('/', (req, res, next) => {
   }
 
   if (req.session.surveyImages) {
-    console.log(`existing ${req.session.surveyImages}`)
+    console.log('Existing survey images found')
   } else {
-    console.log('failed')
+    console.log('Serious error, no images available')
   }
   console.log(`stage ${nextStage}`)
 
   if (nextStage >= numberOfImagesPerSurvey) {
     writeCompleteSurveyDataToFile(req.session.surveyResponse)
+    clearSessionData(req)
     res.render('surveyComplete', {
       surveyResponse: req.session.surveyResponse
     })
   } else {
     res.render('surveyImage', {
       stage: nextStage,
+      currentPage: nextStage + 1,
+      totalPages: numberOfImagesPerSurvey,
       imageName: req.session.surveyImages[nextStage]
     })
   }
