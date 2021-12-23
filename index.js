@@ -97,7 +97,7 @@ const addDataToSession = (req, key, data) => {
 
 const writeCompleteSurveyDataToFile = (data) => {
   try {
-    const writeData = JSON.stringify(data)
+    const writeData = `${JSON.stringify(data)}\n\n`
     fs.appendFile(surveyLogFile, writeData, (err) => {
       if (err) {
         throw err
