@@ -7,7 +7,7 @@ const fs = require('fs')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
-const numberOfImagesPerSurvey = 2
+const numberOfImagesPerSurvey = 20
 const surveyLogFile = 'survey.log'
 
 // process urlencoded form data
