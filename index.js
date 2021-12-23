@@ -126,7 +126,7 @@ app.post('/', (req, res, next) => {
 
   if (req.body.age) {
     console.log(req.body)
-    addMetaDataToSession(req, req.body.firstName, req.body.lastName, req.body.age, req.body.ethnicity, req.body.livedLocations)
+    addMetaDataToSession(req, req.body.firstName, req.body.lastName, req.body.age, req.body.race, req.body.ethnicity, req.body.livedLocations)
   }
   if (req.body.imageName) {
     addImageDataToSession(req, req.body.imageName, req.body.attractiveness, req.body.symmetrical)
