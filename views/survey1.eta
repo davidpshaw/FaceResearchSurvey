@@ -21,6 +21,17 @@
                 <input type="hidden" name="stage" value="<%= it.stage %>" />
                 <div class="row">
                     <div class="col">
+                        <div class="alert alert-success" role="alert">
+                            Participants of this survey will be shown pictures of faces. 
+                            Participants will need to rate the attractiveness of the face on a scale of 1 to 10 (1 being the least attractive and 10 being the most attractive). 
+                            Participants will also need to rate the level of symmetry of the face on a scale of 1 to 10 (1 being the least symmetrical and 10 being the most symmetrical). 
+                            The results of this survey will be used for a research study, so please answer truthfully and as you deem correct. 
+                            This survey should take no longer than 20 minutes. Thank you for your help and support.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <div class="mb-3">
                             <label for="firstName" class="form-label">First Name (optional)</label>
                             <input type="text" class="form-control" id="firstName" name="firstName"

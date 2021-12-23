@@ -17,7 +17,16 @@
 
     <div class="container-fluid" style="padding-top: 20px;">
         <div class="container-md">
-            <h2>Survey Complete!  Thanks for your help!</h2>
+            <div class="row">
+                <div class="col">
+                    <h2>Survey Complete!  Thanks for your help!</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="./">Start over</a>
+                </div>
+            </div>
         </div>
 
     </div>
